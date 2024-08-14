@@ -1,6 +1,13 @@
 import express from "express";
 const app = express();
 
-app.listen(3000);
+app.set('view engine', "pug");
+app.set("views", __dirname + "/views");
 
-console.log("hello");
+app.use("/public", express.static(__dirname + "/public"));
+
+app.get("/", (req, res) => res.render("home"));
+app.get("/*", (req, res) => res.redirect("/")); // 다른 주소가 입력되어도 홈으로 복귀
+
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+app.listen(3000, handleListen);
