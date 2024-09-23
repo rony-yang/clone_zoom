@@ -1,27 +1,45 @@
 // nodemon.json에서 ignore 설정을 통해 현재 파일(프론트엔드 부분)이 수정되더라도 서버는 재시작되지 않음
 
+// 고유한 아이디 생성
+const userId = Date.now();
+
 const messageList = document.querySelector("ul");
 const messageForm = document.querySelector("#message");
 const nickForm = document.querySelector("#nick");
-const socket = new WebSocket(`ws://${window.location.host}`);
+const socket = new WebSocket(`ws://${window.location.host}`); // 서버와 연결 시도
 
 // JSON 객체를 받아서 string으로 반환
 function makeMessage(type, payload) {
-  const msg = {type, payload};
+  const msg = {type, payload, userId};
   return JSON.stringify(msg);
 };
 
+// 서버 연결 성공 시
 socket.addEventListener("open", () => {
   console.log("서버에 연결되었습니다.");
 });
 
+// 메세지 받기
 socket.addEventListener("message", (message) => {
+  let receivedMessage = JSON.parse(message.data);
+  
   // 메세지를 받으면 ul안의 li안에 내용을 넣어서 화면에 표시
   const li = document.createElement("li");
-  li.innerText = message.data;
-  messageList.append(li);
+  li.innerText = receivedMessage.payload;
+
+  // const getUserId = JSON.parse(makeMessage(message.data.userId));
+
+  // 받은 메시지가 내 메시지인지 확인 후 ul에 추가
+  if (receivedMessage.userId === userId) {
+    console.log("내가 보낸 메세지");
+    messageList.append(li); // 내가 보낸 메시지
+  } else {
+    console.log("받은 메세지");
+    messageList.append(li); // 다른 사용자가 보낸 메시지
+  }
 });
 
+// 서버 연결 종료 시
 socket.addEventListener("close", () => {
   console.log("서버 연결이 해제되었습니다.");
 });

@@ -32,7 +32,11 @@ wss.on("connection", (socket) => {
     switch (message.type) {
       // 받은 내용이 메세지일때
       case "new_message" :
-        sockets.forEach(aSocket => aSocket.send(`${socket.nickname} : ${message.payload}`)); // 연결된 모든 socket에 접근하여 메세지 전송
+        sockets.forEach(aSocket => aSocket.send(JSON.stringify({
+          type: "new_message",
+          payload: `${socket.nickname}: ${message.payload}`,
+          userId: message.userId // Include userId
+        })));
         break;
       // 받은 내용이 닉네임일때
       case "nickname" :
