@@ -10,5 +10,11 @@ html(lang="en")
     header
       h1 hello
     main 
-      h1 welcome
+      form#nick
+        input(type="text", placeholder="닉네임을 입력해주세요.", required)
+        button Save
+      ul
+      form#message
+        input(type="text", placeholder="메시지를 입력해주세요.", required)
+        button Send
     script(src="/public/js/app.js")
