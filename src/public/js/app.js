@@ -26,15 +26,20 @@ socket.addEventListener("message", (message) => {
   // 메세지를 받으면 ul안의 li안에 내용을 넣어서 화면에 표시
   const li = document.createElement("li");
   li.innerText = receivedMessage.payload;
+  li.style.listStyleType = "none" // li의 기본 목록 스타일(불릿)을 없앰
 
   // const getUserId = JSON.parse(makeMessage(message.data.userId));
 
   // 받은 메시지가 내 메시지인지 확인 후 ul에 추가
   if (receivedMessage.userId === userId) {
     console.log("내가 보낸 메세지");
+    li.style.backgroundColor = "lightyellow";
+    li.style.textAlign = "right";
     messageList.append(li); // 내가 보낸 메시지
   } else {
     console.log("받은 메세지");
+    li.style.backgroundColor = "#e0f7ff";
+    li.style.textAlign = "left";
     messageList.append(li); // 다른 사용자가 보낸 메시지
   }
 });
